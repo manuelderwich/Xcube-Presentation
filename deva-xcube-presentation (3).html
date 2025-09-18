@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEVA XCUBE - 5 AI Modules for Beverage Equipment Sales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+        }
+
+        .presentation-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            padding: 1rem;
+            height: 100vh;
+            overflow-y: auto;
+            animation: slideIn 0.6s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .deva-logo {
+            background: #dc2626;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            font-size: 1rem;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #a1a1aa;
+            margin-bottom: 1rem;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 15px;
+            border: 2px solid #dc2626;
+        }
+
+        .hero-metric {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .hero-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #dc2626;
+            display: block;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-label {
+            color: #f3f4f6;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .workflow-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .workflow-title {
+            color: #dc2626;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .workflow-svg {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            background: rgba(255,255,255,0.98);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 0.5rem 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .metric {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 0.8rem;
+            border-radius: 8px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #dc2626;
+            display: block;
+        }
+
+        .metric-label {
+            color: #9ca3af;
+            font-size: 0.75rem;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        /* Node Styles */
+        .node-circle {
+            fill: #ffffff;
+            stroke-width: 3;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .node-trigger .node-circle { stroke: #10b981; fill: #ecfdf5; }
+        .node-data .node-circle { stroke: #3b82f6; fill: #eff6ff; }
+        .node-ai .node-circle { stroke: #8b5cf6; fill: #f3e8ff; }
+        .node-action .node-circle { stroke: #f59e0b; fill: #fffbeb; }
+        .node-output .node-circle { stroke: #ef4444; fill: #fef2f2; }
+        .node-community .node-circle { stroke: #06b6d4; fill: #f0f9ff; }
+        .node-condition .node-circle { stroke: #06b6d4; fill: #f0f9ff; }
+
+        .node-text {
+            fill: #1f2937;
+            font-size: 9px;
+            font-weight: 600;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .node-detail {
+            fill: #6b7280;
+            font-size: 7px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .node-icon {
+            font-size: 12px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .connection {
+            stroke: #6b7280;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+            stroke-dasharray: 4,2;
+            animation: dash 3s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -6; }
+        }
+
+        .connection-success { stroke: #10b981; }
+        .connection-error { stroke: #ef4444; }
+
+        .navigation {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.7);
+            padding: 0.5rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: #dc2626;
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .contact-info {
+            text-align: left;
+        }
+
+        .qr-placeholder {
+            background: white;
+            color: #dc2626;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .app-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .app-icon {
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .feature-list li:before {
+            content: '•';
+            color: currentColor;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .slide {
+                padding: 0.5rem;
+            }
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.3rem; }
+            .hero-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="slide-counter" id="slideCounter">1 / 8</div>
+
+        <!-- Slide 1: Hero Page with Key Numbers -->
+        <div class="slide active">
+            <div class="slide-header">
+                <div class="deva-logo">DEVA</div>
+                <h1>XCUBE: AI Sales Revolution</h1>
+                <p class="subtitle">5 AI Modules for Beverage Equipment Sales<br>
+                35 years packaging expertise → Now with AI superpower</p>
+            </div>
+            
+            <div class="hero-metrics">
+                <div class="hero-metric">
+                    <span class="hero-value">+250%</span>
+                    <div class="hero-label">More Deals<br>McKinsey State of AI 2024©</div>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-value">83%</span>
+                    <div class="hero-label">AI Teams See<br>Revenue Growth</div>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-value">3-6mo</span>
+                    <div class="hero-label">Earlier Project<br>Detection</div>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-value">+150%</span>
+                    <div class="hero-label">More Qualified<br>Leads</div>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-value">50%</span>
+                    <div class="hero-label">LinkedIn Accept<br>Rate</div>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-value">2.5 days</span>
+                    <div class="hero-label">Training for<br>Full Setup</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; background: rgba(220, 38, 38, 0.1); padding: 1.5rem; border-radius: 10px; margin-top: 1rem;">
+                <h3 style="color: #dc2626; margin-bottom: 1rem;">Perfect for Beverage Equipment Sales</h3>
+                <p style="color: #f97316; font-weight: bold; font-size: 1.1rem;">
+                    Bottling lines • Filling systems • Packaging equipment • Process automation<br>
+                    <span style="color: #dc2626;">Detect expansions, launches, upgrades before your competition!</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Market Intelligence -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="deva-logo">DEVA</div>
+                <h2>Module 1: Market Intelligence</h2>
+                <div class="results-header">
+                    200+ signals analyzed daily • 85% accuracy rate<br>
+                    15-20 high-priority opportunities detected weekly
+                </div>
+            </div>
+
+            <div class="workflow-container">
+                <div class="workflow-title">AI Market Scanning & Opportunity Detection</div>
+                <svg class="workflow-svg" viewBox="0 0 1400 280">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- Connections -->
+                    <path class="connection" d="M 90 140 L 175 100"/>
+                    <path class="connection" d="M 90 140 L 175 140"/>
+                    <path class="connection" d="M 90 140 L 175 180"/>
+                    <path class="connection" d="M 90 140 L 175 220"/>
+                    <path class="connection" d="M 225 100 L 295 140"/>
+                    <path class="connection" d="M 225 140 L 295 140"/>
+                    <path class="connection" d="M 225 180 L 295 140"/>
+                    <path class="connection" d="M 225 220 L 295 140"/>
+                    <path class="connection" d="M 345 140 L 415 140"/>
+                    <path class="connection" d="M 465 140 L 535 140"/>
+                    <path class="connection" d="M 585 140 L 655 140"/>
+                    <path class="connection" d="M 705 140 L 875 140"/>
+                    <path class="connection" d="M 925 140 L 995 120"/>
+                    <path class="connection" d="M 925 140 L 995 160"/>
+                    <path class="connection" d="M 1040 120 L 1100 120"/>
+                    <path class="connection" d="M 1040 160 L 1100 160"/>
+                    <path class="connection" d="M 1150 120 L 1210 140"/>
+                    <path class="connection" d="M 1150 160 L 1210 140"/>
+                    <path class="connection" d="M 1260 140 L 1320 140"/>
+                    
+                    <!-- Nodes Row 1 -->
+                    <g class="node node-trigger">
+                        <circle class="node-circle" cx="60" cy="140" r="30"/>
+                        <text class="node-icon" x="60" y="135">⏰</text>
+                        <text class="node-text" x="60" y="148">Cron</text>
+                        <text class="node-detail" x="60" y="162">Daily 9AM</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="200" cy="100" r="25"/>
+                        <text class="node-icon" x="200" y="95">📰</text>
+                        <text class="node-text" x="200" y="108">RSS</text>
+                        <text class="node-detail" x="200" y="118">TechCrunch</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="200" cy="140" r="25"/>
+                        <text class="node-icon" x="200" y="135">🔔</text>
+                        <text class="node-text" x="200" y="148">Google</text>
+                        <text class="node-detail" x="200" y="158">Alerts</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="200" cy="180" r="25"/>
+                        <text class="node-icon" x="200" y="175">🐦</text>
+                        <text class="node-text" x="200" y="188">Twitter</text>
+                        <text class="node-detail" x="200" y="198">API</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="200" cy="220" r="25"/>
+                        <text class="node-icon" x="200" y="215">📊</text>
+                        <text class="node-text" x="200" y="228">Reddit</text>
+                        <text class="node-detail" x="200" y="238">Subs</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="320" cy="140" r="25"/>
+                        <text class="node-icon" x="320" y="135">🔄</text>
+                        <text class="node-text" x="320" y="148">Merge</text>
+                        <text class="node-detail" x="320" y="158">Data</text>
+                    </g>
+                    
+                    <g class="node node-ai">
+                        <circle class="node-circle" cx="440" cy="140" r="25"/>
+                        <text class="node-icon" x="440" y="135">🤖</text>
+                        <text class="node-text" x="440" y="148">GPT-4</text>
+                        <text class="node-detail" x="440" y="158">Analyze</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="560" cy="140" r="25"/>
+                        <text class="node-icon" x="560" y="135">📊</text>
+                        <text class="node-text" x="560" y="148">Score</text>
+                        <text class="node-detail" x="560" y="158">1-10</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="680" cy="140" r="25"/>
+                        <text class="node-icon" x="680" y="135">📊</text>
+                        <text class="node-text" x="680" y="148">Airtable</text>
+                        <text class="node-detail" x="680" y="158">Store</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="900" cy="140" r="25"/>
+                        <text class="node-icon" x="900" y="135">🚨</text>
+                        <text class="node-text" x="900" y="148">Alert</text>
+                        <text class="node-detail" x="900" y="158">Priority</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1020" cy="120" r="20"/>
+                        <text class="node-icon" x="1020" y="118">💬</text>
+                        <text class="node-text" x="1020" y="128">Slack</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1020" cy="160" r="20"/>
+                        <text class="node-icon" x="1020" y="158">📧</text>
+                        <text class="node-text" x="1020" y="168">Email</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="1125" cy="120" r="20"/>
+                        <text class="node-icon" x="1125" y="118">👤</text>
+                        <text class="node-text" x="1125" y="128">Assign</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="1125" cy="160" r="20"/>
+                        <text class="node-icon" x="1125" y="158">📊</text>
+                        <text class="node-text" x="1125" y="168">CRM</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1235" cy="140" r="25"/>
+                        <text class="node-icon" x="1235" y="135">🎯</text>
+                        <text class="node-text" x="1235" y="148">Track</text>
+                        <text class="node-detail" x="1235" y="158">Action</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1345" cy="140" r="30"/>
+                        <text class="node-icon" x="1345" y="135">💰</text>
+                        <text class="node-text" x="1345" y="148">Sales</text>
+                        <text class="node-detail" x="1345" y="163">Success</text>
+                    </g>
+                </svg>
+
+                <div class="app-icons">
+                    <div class="app-icon">📰 RSS</div>
+                    <div class="app-icon">🔔 Google</div>
+                    <div class="app-icon">🐦 Twitter</div>
+                    <div class="app-icon">🤖 OpenAI</div>
+                    <div class="app-icon">📊 Airtable</div>
+                    <div class="app-icon">💬 Slack</div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #10b981; margin-bottom: 0.5rem;">Example Detection:</h4>
+                    <p style="font-size: 0.9rem;">"Heineken announces €50M brewery investment in Vietnam" → AI Score: 9/10 → Sales alert in 5 minutes → Your call before competitors</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-value">~200</span>
+                        <span class="metric-label">Signals/Day</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">15-20</span>
+                        <span class="metric-label">High Priority</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">85%</span>
+                        <span class="metric-label">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Smart Prospecting -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="deva-logo">DEVA</div>
+                <h2>Module 2: Smart Prospecting</h2>
+                <div class="results-header">
+                    50% LinkedIn acceptance rate vs 12% manual • 60% response rate<br>
+                    50 personalized prospects contacted daily on autopilot
+                </div>
+            </div>
+
+            <div class="workflow-container">
+                <div class="workflow-title">AI-Powered LinkedIn Prospecting Sequences</div>
+                <svg class="workflow-svg" viewBox="0 0 1300 280">
+                    <!-- Connections -->
+                    <path class="connection" d="M 90 140 L 175 140"/>
+                    <path class="connection" d="M 225 140 L 295 140"/>
+                    <path class="connection" d="M 345 140 L 415 140"/>
+                    <path class="connection" d="M 465 140 L 535 140"/>
+                    <path class="connection" d="M 585 140 L 655 140"/>
+                    <path class="connection" d="M 705 140 L 720 140"/>
+                    <path class="connection" d="M 780 125 L 847 107"/>
+                    <path class="connection" d="M 780 155 L 847 173"/>
+                    <path class="connection" d="M 895 107 L 967 125"/>
+                    <path class="connection" d="M 895 173 L 967 155"/>
+                    <path class="connection" d="M 1015 140 L 1085 140"/>
+                    
+                    <!-- Nodes -->
+                    <g class="node node-trigger">
+                        <circle class="node-circle" cx="60" cy="140" r="30"/>
+                        <text class="node-icon" x="60" y="135">▶️</text>
+                        <text class="node-text" x="60" y="148">Start</text>
+                        <text class="node-detail" x="60" y="160">Manual</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="200" cy="140" r="25"/>
+                        <text class="node-icon" x="200" y="135">📊</text>
+                        <text class="node-text" x="200" y="148">Load</text>
+                        <text class="node-detail" x="200" y="158">Prospects</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="320" cy="140" r="25"/>
+                        <text class="node-icon" x="320" y="135">in</text>
+                        <text class="node-text" x="320" y="148">LinkedIn</text>
+                        <text class="node-detail" x="320" y="158">Research</text>
+                    </g>
+                    
+                    <g class="node node-ai">
+                        <circle class="node-circle" cx="440" cy="140" r="25"/>
+                        <text class="node-icon" x="440" y="135">AI</text>
+                        <text class="node-text" x="440" y="148">GPT</text>
+                        <text class="node-detail" x="440" y="158">Personalize</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="560" cy="140" r="25"/>
+                        <text class="node-icon" x="560" y="135">@</text>
+                        <text class="node-text" x="560" y="148">Send</text>
+                        <text class="node-detail" x="560" y="158">Invite</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="680" cy="140" r="25"/>
+                        <text class="node-icon" x="680" y="135">⏳</text>
+                        <text class="node-text" x="680" y="148">Wait</text>
+                        <text class="node-detail" x="680" y="158">72h</text>
+                    </g>
+                    
+                    <g class="node node-condition">
+                        <polygon class="node-circle" points="750,110 810,140 750,170 690,140" stroke="#06b6d4" fill="#f0f9ff"/>
+                        <text class="node-text" x="750" y="145">Response?</text>
+                    </g>
+                    
+                    <g class="node node-ai">
+                        <circle class="node-circle" cx="870" cy="120" r="25"/>
+                        <text class="node-icon" x="870" y="115">🤖</text>
+                        <text class="node-text" x="870" y="128">Analyze</text>
+                        <text class="node-detail" x="870" y="138">Interest</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="870" cy="160" r="25"/>
+                        <text class="node-icon" x="870" y="155">📝</text>
+                        <text class="node-text" x="870" y="168">Mark</text>
+                        <text class="node-detail" x="870" y="178">Follow-up</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="990" cy="140" r="25"/>
+                        <text class="node-icon" x="990" y="135">📊</text>
+                        <text class="node-text" x="990" y="148">Update</text>
+                        <text class="node-detail" x="990" y="158">CRM</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1110" cy="140" r="25"/>
+                        <text class="node-icon" x="1110" y="135">💬</text>
+                        <text class="node-text" x="1110" y="148">Notify</text>
+                        <text class="node-detail" x="1110" y="158">Sales</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1180" cy="140" r="30"/>
+                        <text class="node-icon" x="1180" y="135">🎯</text>
+                        <text class="node-text" x="1180" y="148">Qualified</text>
+                        <text class="node-detail" x="1180" y="163">Lead</text>
+                    </g>
+                </svg>
+
+                <div class="app-icons">
+                    <div class="app-icon">💼 LinkedIn</div>
+                    <div class="app-icon">🤖 OpenAI</div>
+                    <div class="app-icon">📊 Airtable</div>
+                    <div class="app-icon">💬 Slack</div>
+                    <div class="app-icon">📧 Gmail</div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #10b981; margin-bottom: 0.5rem;">AI Message Example:</h4>
+                    <p style="font-size: 0.9rem;">"Hi [Name], saw your post about increasing capacity. With craft beer growing 8%, what's your biggest bottling challenge?" → 60% response vs 12% manual</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-value">50</span>
+                        <span class="metric-label">Daily Invites</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">50%</span>
+                        <span class="metric-label">Accept Rate</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">60%</span>
+                        <span class="metric-label">Response</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Client Nurturing -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="deva-logo">DEVA</div>
+                <h2>Module 3: Client Nurturing</h2>
+                <div class="results-header">
+                    Automated touchpoints maintain 500+ relationships at scale<br>
+                    +25% client engagement • 40% faster deal acceleration
+                </div>
+            </div>
+
+            <div class="workflow-container">
+                <div class="workflow-title">Automated Relationship Management & Touchpoints</div>
+                <svg class="workflow-svg" viewBox="0 0 1400 320">
+                    <!-- Connections -->
+                    <path class="connection" d="M 87 145 L 177 127"/>
+                    <path class="connection" d="M 87 175 L 177 193"/>
+                    <path class="connection" d="M 223 127 L 297 145"/>
+                    <path class="connection" d="M 223 193 L 297 175"/>
+                    <path class="connection" d="M 345 160 L 415 160"/>
+                    <path class="connection" d="M 465 160 L 537 127"/>
+                    <path class="connection" d="M 465 160 L 537 193"/>
+                    <path class="connection" d="M 583 127 L 657 145"/>
+                    <path class="connection" d="M 583 193 L 657 175"/>
+                    <path class="connection" d="M 705 160 L 777 127"/>
+                    <path class="connection" d="M 705 160 L 777 193"/>
+                    <path class="connection" d="M 823 127 L 852 107"/>
+                    <path class="connection" d="M 823 127 L 850 160"/>
+                    <path class="connection" d="M 823 193 L 852 213"/>
+                    <path class="connection" d="M 888 107 L 977 145"/>
+                    <path class="connection" d="M 890 160 L 975 160"/>
+                    <path class="connection" d="M 888 213 L 977 175"/>
+                    <path class="connection" d="M 1025 160 L 1130 160"/>
+                    
+                    <!-- Nodes -->
+                    <g class="node node-trigger">
+                        <circle class="node-circle" cx="60" cy="160" r="30"/>
+                        <text class="node-icon" x="60" y="155">📅</text>
+                        <text class="node-text" x="60" y="168">Schedule</text>
+                        <text class="node-detail" x="60" y="180">Weekly</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="200" cy="140" r="25"/>
+                        <text class="node-icon" x="200" y="135">👥</text>
+                        <text class="node-text" x="200" y="148">Active</text>
+                        <text class="node-detail" x="200" y="158">Clients</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="200" cy="180" r="25"/>
+                        <text class="node-icon" x="200" y="175">🎯</text>
+                        <text class="node-text" x="200" y="188">Prospects</text>
+                        <text class="node-detail" x="200" y="198">Warm</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="320" cy="160" r="25"/>
+                        <text class="node-icon" x="320" y="155">🔍</text>
+                        <text class="node-text" x="320" y="168">Segment</text>
+                        <text class="node-detail" x="320" y="178">by Stage</text>
+                    </g>
+                    
+                    <g class="node node-ai">
+                        <circle class="node-circle" cx="440" cy="160" r="25"/>
+                        <text class="node-icon" x="440" y="155">🤖</text>
+                        <text class="node-text" x="440" y="168">Generate</text>
+                        <text class="node-detail" x="440" y="178">Content</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="560" cy="140" r="25"/>
+                        <text class="node-icon" x="560" y="135">📧</text>
+                        <text class="node-text" x="560" y="148">Email</text>
+                        <text class="node-detail" x="560" y="158">Sequence</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="560" cy="180" r="25"/>
+                        <text class="node-icon" x="560" y="175">💼</text>
+                        <text class="node-text" x="560" y="188">LinkedIn</text>
+                        <text class="node-detail" x="560" y="198">Touch</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="680" cy="160" r="25"/>
+                        <text class="node-icon" x="680" y="155">📱</text>
+                        <text class="node-text" x="680" y="168">Multi</text>
+                        <text class="node-detail" x="680" y="178">Channel</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="800" cy="140" r="25"/>
+                        <text class="node-icon" x="800" y="135">📊</text>
+                        <text class="node-text" x="800" y="148">Track</text>
+                        <text class="node-detail" x="800" y="158">Opens</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="800" cy="180" r="25"/>
+                        <text class="node-icon" x="800" y="175">🔄</text>
+                        <text class="node-text" x="800" y="188">Follow-up</text>
+                        <text class="node-detail" x="800" y="198">Logic</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="870" cy="120" r="20"/>
+                        <text class="node-icon" x="870" y="118">🔥</text>
+                        <text class="node-text" x="870" y="128">Hot</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="870" cy="160" r="20"/>
+                        <text class="node-icon" x="870" y="158">🌡️</text>
+                        <text class="node-text" x="870" y="168">Warm</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="870" cy="200" r="20"/>
+                        <text class="node-icon" x="870" y="198">❄️</text>
+                        <text class="node-text" x="870" y="208">Cold</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="1000" cy="160" r="25"/>
+                        <text class="node-icon" x="1000" y="155">🚨</text>
+                        <text class="node-text" x="1000" y="168">Alert</text>
+                        <text class="node-detail" x="1000" y="178">Sales</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1160" cy="160" r="30"/>
+                        <text class="node-icon" x="1160" y="155">🎯</text>
+                        <text class="node-text" x="1160" y="168">Meeting</text>
+                        <text class="node-detail" x="1160" y="183">Booked</text>
+                    </g>
+                </svg>
+
+                <div class="app-icons">
+                    <div class="app-icon">📧 Gmail</div>
+                    <div class="app-icon">💼 LinkedIn</div>
+                    <div class="app-icon">📱 WhatsApp</div>
+                    <div class="app-icon">🤖 OpenAI</div>
+                    <div class="app-icon">📊 HubSpot</div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #10b981; margin-bottom: 0.5rem;">Smart Nurturing:</h4>
+                    <p style="font-size: 0.9rem;">Automatic industry insights delivery, birthday wishes, company milestone congratulations, relevant case studies sharing - all personalized by AI</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-value">500+</span>
+                        <span class="metric-label">Relationships</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">+25%</span>
+                        <span class="metric-label">Engagement</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">40%</span>
+                        <span class="metric-label">Faster Deals</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: GroundLink -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="deva-logo">DEVA</div>
+                <h2>Module 4: GroundLink</h2>
+                <div class="results-header">
+                    30 field experts per region providing project intelligence<br>
+                    3-6 months earlier project detection • 60% expert response rate
+                </div>
+            </div>
+
+            <div class="workflow-container">
+                <div class="workflow-title">Expert Network Intelligence & Community Building</div>
+                <svg class="workflow-svg" viewBox="0 0 1500 350">
+                    <!-- Stage Labels -->
+                    <text x="80" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">RECRUIT</text>
+                    <text x="350" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">ENGAGE</text>
+                    <text x="650" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">COLLECT</text>
+                    <text x="950" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">PROCESS</text>
+                    <text x="1250" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">ACTION</text>
+                    
+                    <!-- Connections -->
+                    <path class="connection" d="M 105 80 L 175 80"/>
+                    <path class="connection" d="M 225 80 L 275 80"/>
+                    <path class="connection" d="M 325 80 L 375 80"/>
+                    <path class="connection" d="M 425 80 L 475 80"/>
+                    <path class="connection" d="M 525 80 L 575 80"/>
+                    <path class="connection" d="M 625 80 L 675 80"/>
+                    <path class="connection" d="M 725 80 L 775 80"/>
+                    <path class="connection" d="M 825 80 L 875 80"/>
+                    <path class="connection" d="M 925 80 L 975 80"/>
+                    <path class="connection" d="M 1025 80 L 1075 80"/>
+                    <path class="connection" d="M 1125 80 L 1175 80"/>
+                    <path class="connection" d="M 1225 80 L 1270 80"/>
+                    
+                    <!-- Nodes -->
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="80" cy="80" r="25"/>
+                        <text class="node-icon" x="80" y="75">🎯</text>
+                        <text class="node-text" x="80" y="88">Sales Nav</text>
+                        <text class="node-detail" x="80" y="98">Hunt</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="200" cy="80" r="25"/>
+                        <text class="node-icon" x="200" y="75">🔍</text>
+                        <text class="node-text" x="200" y="88">Filter</text>
+                        <text class="node-detail" x="200" y="98">Experts</text>
+                    </g>
+                    
+                    <g class="node node-community">
+                        <circle class="node-circle" cx="300" cy="80" r="25"/>
+                        <text class="node-icon" x="300" y="75">💬</text>
+                        <text class="node-text" x="300" y="88">Icebreaker</text>
+                        <text class="node-detail" x="300" y="98">Exclusive</text>
+                    </g>
+                    
+                    <g class="node node-community">
+                        <circle class="node-circle" cx="400" cy="80" r="25"/>
+                        <text class="node-icon" x="400" y="75">🏆</text>
+                        <text class="node-text" x="400" y="88">Valorize</text>
+                        <text class="node-detail" x="400" y="98">Expert</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="500" cy="80" r="25"/>
+                        <text class="node-icon" x="500" y="75">❓</text>
+                        <text class="node-text" x="500" y="88">Questions</text>
+                        <text class="node-detail" x="500" y="98">Simple</text>
+                    </g>
+                    
+                    <g class="node node-data">
+                        <circle class="node-circle" cx="600" cy="80" r="25"/>
+                        <text class="node-icon" x="600" y="75">📨</text>
+                        <text class="node-text" x="600" y="88">Collect</text>
+                        <text class="node-detail" x="600" y="98">Responses</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="700" cy="80" r="25"/>
+                        <text class="node-icon" x="700" y="75">📊</text>
+                        <text class="node-text" x="700" y="88">G.Sheets</text>
+                        <text class="node-detail" x="700" y="98">Central</text>
+                    </g>
+                    
+                    <g class="node node-ai">
+                        <circle class="node-circle" cx="800" cy="80" r="25"/>
+                        <text class="node-icon" x="800" y="75">🤖</text>
+                        <text class="node-text" x="800" y="88">ChatGPT</text>
+                        <text class="node-detail" x="800" y="98">Analyze</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="900" cy="80" r="25"/>
+                        <text class="node-icon" x="900" y="75">🔍</text>
+                        <text class="node-text" x="900" y="88">Extract</text>
+                        <text class="node-detail" x="900" y="98">Insights</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1000" cy="80" r="25"/>
+                        <text class="node-icon" x="1000" y="75">🚨</text>
+                        <text class="node-text" x="1000" y="88">Project</text>
+                        <text class="node-detail" x="1000" y="98">Signals</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1100" cy="80" r="25"/>
+                        <text class="node-icon" x="1100" y="75">📧</text>
+                        <text class="node-text" x="1100" y="88">Alert</text>
+                        <text class="node-detail" x="1100" y="98">Sales</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="1200" cy="80" r="25"/>
+                        <text class="node-icon" x="1200" y="75">🎯</text>
+                        <text class="node-text" x="1200" y="88">Context</text>
+                        <text class="node-detail" x="1200" y="98">Warm Intro</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1300" cy="80" r="30"/>
+                        <text class="node-icon" x="1300" y="75">💰</text>
+                        <text class="node-text" x="1300" y="88">Sales</text>
+                        <text class="node-detail" x="1300" y="103">Success</text>
+                    </g>
+                </svg>
+
+                <div class="app-icons">
+                    <div class="app-icon">💼 LinkedIn</div>
+                    <div class="app-icon">📱 WhatsApp</div>
+                    <div class="app-icon">📊 G.Sheets</div>
+                    <div class="app-icon">🤖 ChatGPT</div>
+                    <div class="app-icon">📧 Gmail</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="color: #10b981; margin-bottom: 0.5rem;">Expert Signal Example:</h4>
+                <p style="font-size: 0.9rem;">"Our 36K BPH PET line showing fatigue. Evaluating options for 2025." → ChatGPT: €2-3M budget, Q2-Q3 timeline → Sales: Warm intro + audit proposal → Meeting before competition</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric">
+                    <span class="metric-value">30</span>
+                    <span class="metric-label">Experts/Region</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">60%</span>
+                    <span class="metric-label">Response Rate</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">3-6mo</span>
+                    <span class="metric-label">Earlier Detection</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">Weekly</span>
+                    <span class="metric-label">Intel Reports</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Team Training -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="deva-logo">DEVA</div>
+                <h2>Module 5: Team Training</h2>
+                <div class="results-header">
+                    2.5-day bootcamp transforms your team into autonomous AI navigators<br>
+                    90% adoption rate • 3 months to full proficiency
+                </div>
+            </div>
+
+            <div class="workflow-container">
+                <div class="workflow-title">Complete Team Transformation & AI Adoption</div>
+                <svg class="workflow-svg" viewBox="0 0 1400 320">
+                    <!-- Training Phases -->
+                    <text x="80" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">DAY 1: FOUNDATIONS</text>
+                    <text x="450" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">DAY 2: PRACTICE</text>
+                    <text x="800" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">DAY 3: MASTERY</text>
+                    <text x="1150" y="25" style="fill: #dc2626; font-weight: bold; font-size: 12px;">ONGOING</text>
+                    
+                    <!-- Connections -->
+                    <path class="connection" d="M 105 80 L 175 80"/>
+                    <path class="connection" d="M 225 80 L 275 80"/>
+                    <path class="connection" d="M 325 80 L 375 80"/>
+                    <path class="connection" d="M 425 80 L 475 80"/>
+                    <path class="connection" d="M 525 80 L 575 80"/>
+                    <path class="connection" d="M 625 80 L 675 80"/>
+                    <path class="connection" d="M 725 80 L 775 80"/>
+                    <path class="connection" d="M 825 80 L 875 80"/>
+                    <path class="connection" d="M 925 80 L 975 80"/>
+                    <path class="connection" d="M 1025 80 L 1075 80"/>
+                    <path class="connection" d="M 1125 80 L 1170 80"/>
+                    
+                    <!-- Support loop -->
+                    <path class="connection" d="M 1200 110 L 1200 140 L 80 140 L 80 105" stroke="#10b981" stroke-dasharray="8,4"/>
+                    <text x="640" y="155" style="fill: #10b981; font-size: 10px;">Continuous Support & Optimization</text>
+                    
+                    <!-- Day 1 Nodes -->
+                    <g class="node node-trigger">
+                        <circle class="node-circle" cx="80" cy="80" r="25"/>
+                        <text class="node-icon" x="80" y="75">🎯</text>
+                        <text class="node-text" x="80" y="88">Assess</text>
+                        <text class="node-detail" x="80" y="98">Current</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="200" cy="80" r="25"/>
+                        <text class="node-icon" x="200" y="75">🧠</text>
+                        <text class="node-text" x="200" y="88">AI Basics</text>
+                        <text class="node-detail" x="200" y="98">Concepts</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="300" cy="80" r="25"/>
+                        <text class="node-icon" x="300" y="75">🛠️</text>
+                        <text class="node-text" x="300" y="88">Tools</text>
+                        <text class="node-detail" x="300" y="98">Setup</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="400" cy="80" r="25"/>
+                        <text class="node-icon" x="400" y="75">📊</text>
+                        <text class="node-text" x="400" y="88">Workflows</text>
+                        <text class="node-detail" x="400" y="98">Demo</text>
+                    </g>
+                    
+                    <!-- Day 2 Nodes -->
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="500" cy="80" r="25"/>
+                        <text class="node-icon" x="500" y="75">💼</text>
+                        <text class="node-text" x="500" y="88">LinkedIn</text>
+                        <text class="node-detail" x="500" y="98">Practice</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="600" cy="80" r="25"/>
+                        <text class="node-icon" x="600" y="75">🤖</text>
+                        <text class="node-text" x="600" y="88">Prompts</text>
+                        <text class="node-detail" x="600" y="98">Craft</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="700" cy="80" r="25"/>
+                        <text class="node-icon" x="700" y="75">👥</text>
+                        <text class="node-text" x="700" y="88">Network</text>
+                        <text class="node-detail" x="700" y="98">Build</text>
+                    </g>
+                    
+                    <!-- Day 3 Nodes -->
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="800" cy="80" r="25"/>
+                        <text class="node-icon" x="800" y="75">🎯</text>
+                        <text class="node-text" x="800" y="88">Live</text>
+                        <text class="node-detail" x="800" y="98">Projects</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="900" cy="80" r="25"/>
+                        <text class="node-icon" x="900" y="75">📊</text>
+                        <text class="node-text" x="900" y="88">Metrics</text>
+                        <text class="node-detail" x="900" y="98">Track</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1000" cy="80" r="25"/>
+                        <text class="node-icon" x="1000" y="75">✅</text>
+                        <text class="node-text" x="1000" y="88">Certify</text>
+                        <text class="node-detail" x="1000" y="98">Team</text>
+                    </g>
+                    
+                    <!-- Ongoing Support -->
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="1100" cy="80" r="25"/>
+                        <text class="node-icon" x="1100" y="75">🔄</text>
+                        <text class="node-text" x="1100" y="88">Support</text>
+                        <text class="node-detail" x="1100" y="98">3 Months</text>
+                    </g>
+                    
+                    <g class="node node-output">
+                        <circle class="node-circle" cx="1200" cy="80" r="30"/>
+                        <text class="node-icon" x="1200" y="75">🚀</text>
+                        <text class="node-text" x="1200" y="88">Autonomous</text>
+                        <text class="node-detail" x="1200" y="103">Team</text>
+                    </g>
+                    
+                    <!-- Training modules below -->
+                    <text x="200" y="200" style="fill: #dc2626; font-weight: bold; font-size: 12px;">5 Training Modules:</text>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="200" cy="230" r="20"/>
+                        <text class="node-icon" x="200" y="228">1️⃣</text>
+                        <text class="node-text" x="200" y="240">AI Mindset</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="300" cy="230" r="20"/>
+                        <text class="node-icon" x="300" y="228">2️⃣</text>
+                        <text class="node-text" x="300" y="240">Market Intel</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="400" cy="230" r="20"/>
+                        <text class="node-icon" x="400" y="228">3️⃣</text>
+                        <text class="node-text" x="400" y="240">Prospecting</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="500" cy="230" r="20"/>
+                        <text class="node-icon" x="500" y="228">4️⃣</text>
+                        <text class="node-text" x="500" y="240">Networks</text>
+                    </g>
+                    
+                    <g class="node node-action">
+                        <circle class="node-circle" cx="600" cy="230" r="20"/>
+                        <text class="node-icon" x="600" y="228">5️⃣</text>
+                        <text class="node-text" x="600" y="240">Optimization</text>
+                    </g>
+                </svg>
+
+                <div class="app-icons">
+                    <div class="app-icon">📚 Training</div>
+                    <div class="app-icon">📖 Materials</div>
+                    <div class="app-icon">💻 Hands-on</div>
+                    <div class="app-icon">📊 Tracking</div>
+                    <div class="app-icon">🎯 Certification</div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #10b981; margin-bottom: 0.5rem;">Training Approach:</h4>
+                    <ul class="feature-list">
+                        <li>Hands-on workshops with real prospects</li>
+                        <li>Custom prompts for beverage industry</li>
+                        <li>Live workflow implementation</li>
+                        <li>Peer-to-peer learning & best practices</li>
+                        <li>Continuous coaching & optimization</li>
+                    </ul>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-value">2.5</span>
+                        <span class="metric-label">Days Bootcamp</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">90%</span>
+                        <span class="metric-label">Adoption Rate</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">3mo</span>
+                        <span class="metric-label">Full Proficiency</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: ROI & Implementation -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="deva-logo">DEVA</div>
+                <h2>Ready to Transform Your Sales?</h2>
+                <p class="subtitle">Implementation Plan & Expected Results</p>
+            </div>
+
+            <div class="hero-metrics">
+                <div class="hero-metric">
+                    <span class="hero-value">300-700%</span>
+                    <div class="hero-label">ROI within<br>12 months</div>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-value">+150%</span>
+                    <div class="hero-label">More qualified<br>leads</div>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-value">3-6mo</span>
+                    <div class="hero-label">Earlier project<br>detection</div>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-value">Month 3</span>
+                    <div class="hero-label">Full ROI<br>achieved</div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h3>Ready to Start Your AI Transformation?</h3>
+                
+                <div class="two-column" style="text-align: left; margin: 1.5rem 0;">
+                    <div>
+                        <h4>💼 What You Get:</h4>
+                        <ul class="feature-list">
+                            <li>5 ready-to-use AI modules</li>
+                            <li>Custom prompts for beverage equipment</li>
+                            <li>Expert network setup (30 contacts)</li>
+                            <li>Complete team training (2.5 days)</li>
+                            <li>3 months implementation support</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🎯 Your Expected Results:</h4>
+                        <ul class="feature-list">
+                            <li><strong>Week 1-2:</strong> Setup & team training</li>
+                            <li><strong>Month 1-3:</strong> First qualified leads</li>
+                            <li><strong>Month 3:</strong> Full ROI achieved</li>
+                            <li><strong>Ongoing:</strong> 300-700% ROI growth</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 10px; text-align: center; margin-top: 2rem;">
+                <h3 style="color: #10b981; margin-bottom: 1rem;">Brewery Equipment Success Story</h3>
+                <p><strong>Before XCUBE:</strong> 10 leads/month, 15% conversion</p>
+                <p><strong>After XCUBE:</strong> 25 leads/month, 22% conversion</p>
+                <p style="font-size: 1.5rem; color: #dc2626; font-weight: bold; margin-top: 1rem;">
+                    Result: +180% revenue growth in 8 months
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Contact -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="deva-logo">DEVA</div>
+                <h2>Let's Talk Business</h2>
+                <p class="subtitle">Your AI Sales Revolution Starts Now</p>
+            </div>
+
+            <div class="cta-section">
+                <h3>⚡ Contact & Next Steps</h3>
+                
+                <div class="contact-info" style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <p><strong>📧 Contact:</strong> Manuel Derwich<br>
+                    manuel@devaaisales.com</p>
+                    
+                    <p><strong>📱 Call:</strong> +33 7 73 16 10 24</p>
+                    
+                    <p><strong>🌐 Demo:</strong> Schedule 30min strategy session</p>
+                    
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                        <p><strong>🎯 Next Steps:</strong></p>
+                        <p>1. Free 30min strategy session<br>
+                        2. Analyze your specific challenges<br>  
+                        3. Custom XCUBE implementation plan<br>
+                        4. Start generating leads in 30 days</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem; padding: 2rem; background: rgba(220, 38, 38, 0.1); border-radius: 15px; border: 2px solid #dc2626;">
+                <h3 style="color: #dc2626; font-size: 1.8rem; margin-bottom: 1rem;">
+                    Ready to dominate your market with AI-powered sales?
+                </h3>
+                <p style="font-size: 1.3rem; color: #f97316; font-weight: bold;">
+                    "AI is not the future of sales. It's the present.<br>
+                    Your competitors are already implementing. Will you lead or follow?"
+                </p>
+                <div style="font-size: 2rem; margin-top: 1rem; color: #dc2626;">
+                    <strong>Let's talk! 🚀</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Prev</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+            
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function changeSlide(n) {
+            if ((currentSlide + n >= 0) && (currentSlide + n < totalSlides)) {
+                showSlide(currentSlide + n);
+            }
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            }
+        });
+        
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.nav-btn') || e.target.closest('a') || e.target.closest('button')) {
+                return;
+            }
+            changeSlide(1);
+        });
+        
+        showSlide(0);
+        
+        // Animate connections
+        document.querySelectorAll('.connection').forEach((connection, index) => {
+            connection.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>
